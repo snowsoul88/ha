@@ -2,7 +2,7 @@ blueprint:
   name: HA leave and arrive.
   description: Send a notification to a device when a person leaves or arrived a specific zone.
   domain: automation
-  source_url: https://gist.github.com/no
+  source_url: https://github.com/snowsoul88/ha/blob/main/ha_leave_arrive.yaml
   input:
     person_entity:
       name: Person
