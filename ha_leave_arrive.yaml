@@ -1,6 +1,6 @@
 blueprint:
-  name: Zone Notification -leave/arrived.
-  description:  Send a notification to a device when a person leaves or arrived a specific zone.
+  name: HA leave and arrive.
+  description: Send a notification to a device when a person leaves or arrived a specific zone.
   domain: automation
   source_url: https://gist.github.com/no
   input:
