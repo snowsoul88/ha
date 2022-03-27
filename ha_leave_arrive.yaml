@@ -1,0 +1,42 @@
+blueprint:
+  name: Zone Notification -leave/arrived.
+  description:  Send a notification to a device when a person leaves or arrived a specific zone.
+  domain: automation
+  source_url: https://gist.github.com/no
+  input:
+    person_entity:
+      name: Person
+      selector:
+        entity:
+          domain: person
+    zone_entity:
+      name: Zone
+      selector:
+        entity:
+          domain: zone
+
+trigger:
+  platform: state
+  entity_id: !input person_entity
+
+variables:
+  zone_entity: !input zone_entity
+  zone_state: "{{ states[zone_entity].name }}"
+  person_entity: !input person_entity
+  person_name: "{{ states[person_entity].name }}"
+
+condition:
+  condition: template
+  value_template: "{{ zone_entity == 'zone.home' and trigger.to_state.state == 'home' and trigger.from_state.state != 'home' or zone_entity == 'zone.home' and trigger.from_state.state == 'home' and trigger.to_state.state != 'home' or trigger.to_state.state == zone_state and trigger.from_state.state != zone_state or trigger.from_state.state == zone_state and trigger.to_state.state != zone_state}}"
+
+action:
+  - alias: "Notify that a person has left or arrived the zone"
+    domain: mobile_app
+    type: notify
+    device_id: !input notify_device
+    message: |
+        {% if trigger.event == 'enter' %} 
+          '{{ person_name }} has arrived at {{ zone_state }}'
+        {% else %} 
+          '{{ person_name }} has left {{ zone_state }}'
+        {% endif %}
